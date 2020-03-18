@@ -1,0 +1,96 @@
+const Discord = require('discord.js');
+const bot = new Discord.Client
+
+const token = 'Njg5Njc0ODczNzgxNjE2NjU4.XnGVNQ.3wUtL_w6o4U7LN5F_-5HhFp_tDg';
+
+const PREFIX = "*";
+
+bot.on('ready', () =>{
+    console.log('Online.');
+})
+
+bot.on('message', msg=>{
+    if (msg.content === 'privet comrade'){
+        msg.channel.send('Privet Comrade!')
+    }
+})
+
+bot.on('message', message=>{
+    if(!message.content.startsWith(PREFIX)) return;
+    
+    let args = message.content.substring(PREFIX.length).split(" ")
+
+    switch(args[0]){
+        case 'help':
+            message.channel.send('The bot is currently under development, please contact an Administrator to get help.')
+            break;
+        case 'info':
+            message.channel.send('Server version: 1.0')
+            break;
+    }
+})
+bot.on('message', message =>{
+    
+    let args = message.content.substring(PREFIX.length).split(" ");
+    
+    switch (args[1]){
+        case 'kick':
+
+            const user = message.mentions.users.first();
+
+            if(user){
+                const member = message.guild.member(user);
+
+                if(member){
+                    member.kick('You have been kicked from the server.').then(() =>{
+                        message.reply(`${user.tag} was kicked from the Union.`)
+                    }).catch(error =>{
+                        message.reply ('Unable to kicked user for unkown reasons.')
+                        console.log(error);
+                    });
+                }else{
+                    message.reply("Unable to find user. (404 Not Found.)")
+                }
+            }else{
+                message.reply('Unable to find user. (404 Not Found.)');
+            }
+    };
+});
+bot.on('message', message =>{
+    
+    let args = message.content.substring(PREFIX.length).split(" ");
+    
+    switch (args[2]){
+        case 'ban':
+
+            const user = message.mentions.users.first();
+
+            if(user){
+                const member = message.guild.member(user);
+
+                if(member){
+                   member.ban({reasion: 'You have been banned from the Union'}).then(() =>{
+                       message.reply('Comrade, you have banned the user and sent them to Gulag.')
+                   })
+                }else{
+                    message.reply("Unable to find user. (404 Not Found.)")
+                }
+            }else{
+                message.reply('Unable to find user. (404 Not Found.)');
+            }
+    };
+});
+bot.on('message', message =>{
+    
+    let args = message.content.substring(PREFIX.length).split (" ");
+    
+    switch (args[2]){
+        case 'embed':
+            const embed = new Discord.RichEmbed()
+            .addfield('Player Name', message.author.username);
+            message.channel.sendEmbed(embed);
+            break;
+    }
+})
+
+bot.login(process.env.token);
